@@ -15,11 +15,14 @@ app = FastAPI(title="Multi-Tenant RAG API - Phase 0")
 
 QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
 COLLECTION_NAME = "chunks"
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 qdrant_client = QdrantClient(path=QDRANT_PATH)
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-openai_client = OpenAI(api_key=OPENAI_API_KEY)
+openai_client = OpenAI(
+    api_key=GEMINI_API_KEY,
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
 class QueryRequest(BaseModel):
     query: str
@@ -66,7 +69,7 @@ def query_endpoint(req: QueryRequest):
     
     user_prompt = f"Context:\n{context_str}\n\nQuestion: {req.query}"
     
-    llm_model = "gpt-4o-mini"
+    llm_model = "gemini-2.5-flash"
     
     response = openai_client.chat.completions.create(
         model=llm_model,

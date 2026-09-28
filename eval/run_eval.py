@@ -9,6 +9,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Map Gemini to OpenAI so Ragas uses Gemini transparently
+if os.getenv("GEMINI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = os.getenv("GEMINI_API_KEY")
+    os.environ["OPENAI_API_BASE"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    os.environ["OPENAI_BASE_URL"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
 API_URL = os.getenv("API_URL", "http://localhost:8000/query")
 EVAL_DATA_PATH = "eval/questions.jsonl"
 RESULTS_PATH = "eval/results.csv"
@@ -62,9 +68,15 @@ def run_evaluation():
     dataset = Dataset.from_dict(data_dict)
     
     print("Running RAGAS answer_correctness metric...")
+    from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+    gemini_llm = ChatOpenAI(model="gemini-2.5-flash")
+    gemini_embeddings = OpenAIEmbeddings(model="text-embedding-004")
+    
     result = evaluate(
         dataset,
-        metrics=[answer_correctness]
+        metrics=[answer_correctness],
+        llm=gemini_llm,
+        embeddings=gemini_embeddings
     )
     
     ragas_df = result.to_pandas()
