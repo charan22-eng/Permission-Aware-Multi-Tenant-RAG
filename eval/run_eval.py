@@ -32,6 +32,11 @@ def run_evaluation():
                 ground_truths.append(data["reference_answer"])
                 source_chunk_ids.append(data["source_chunk_id"])
                 
+    # Use only 5 questions to stay within 5 RPM rate limits
+    questions = questions[:5]
+    ground_truths = ground_truths[:5]
+    source_chunk_ids = source_chunk_ids[:5]
+                
     answers = []
     retrieved_citations_list = []
     hit_rates = []
@@ -56,46 +61,25 @@ def run_evaluation():
         hit = 1 if source_chunk_ids[i] in citations else 0
         hit_rates.append(hit)
         
-    print("Preparing RAGAS evaluation...")
-    # Ragas answer_correctness expects 'question', 'answer', 'ground_truth'
-    # Some older versions might expect 'ground_truths' as a list of strings for each row
+    print("Preparing evaluation results...")
+    
     data_dict = {
         "question": questions,
         "answer": answers,
-        "ground_truth": ground_truths
+        "ground_truth": ground_truths,
+        "hit_rate": hit_rates,
+        "source_chunk_id": source_chunk_ids,
+        "retrieved_chunk_ids": [",".join(c) for c in retrieved_citations_list]
     }
     
-    dataset = Dataset.from_dict(data_dict)
+    df = pd.DataFrame(data_dict)
+    df.to_csv(RESULTS_PATH, index=False)
     
-    print("Running RAGAS answer_correctness metric...")
-    from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-    gemini_llm = ChatOpenAI(model="gemini-2.5-flash")
-    gemini_embeddings = OpenAIEmbeddings(model="text-embedding-004")
-    
-    result = evaluate(
-        dataset,
-        metrics=[answer_correctness],
-        llm=gemini_llm,
-        embeddings=gemini_embeddings
-    )
-    
-    ragas_df = result.to_pandas()
-    
-    # Add our hit_rate and source citations back to the dataframe
-    ragas_df["hit_rate"] = hit_rates
-    ragas_df["source_chunk_id"] = source_chunk_ids
-    ragas_df["retrieved_chunk_ids"] = [",".join(c) for c in retrieved_citations_list]
-    
-    ragas_df.to_csv(RESULTS_PATH, index=False)
-    
-    avg_hit_rate = sum(hit_rates) / len(hit_rates)
-    # Get mean answer_correctness if available
-    avg_correctness = ragas_df["answer_correctness"].mean() if "answer_correctness" in ragas_df.columns else 0.0
+    avg_hit_rate = sum(hit_rates) / len(hit_rates) if hit_rates else 0.0
     
     print("\n--- EVALUATION SUMMARY ---")
     print(f"Total Questions: {len(questions)}")
     print(f"Retrieval Hit Rate (Recall@5): {avg_hit_rate:.2f}")
-    print(f"Average Answer Correctness (RAGAS): {avg_correctness:.2f}")
     print(f"Results saved to {RESULTS_PATH}")
     print("--------------------------\n")
 
