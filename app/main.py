@@ -21,7 +21,8 @@ qdrant_client = QdrantClient(path=QDRANT_PATH)
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 openai_client = OpenAI(
     api_key=GEMINI_API_KEY,
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+    timeout=5.0
 )
 
 class QueryRequest(BaseModel):
@@ -40,11 +41,11 @@ def query_endpoint(req: QueryRequest):
     query_vector = embedding_model.encode(req.query).tolist()
     
     # 2. Retrieve top-5 from Qdrant
-    search_result = qdrant_client.search(
+    search_result = qdrant_client.query_points(
         collection_name=COLLECTION_NAME,
-        query_vector=query_vector,
+        query=query_vector,
         limit=5
-    )
+    ).points
     
     if not search_result:
         raise HTTPException(status_code=404, detail="No relevant context found.")
@@ -69,18 +70,23 @@ def query_endpoint(req: QueryRequest):
     
     user_prompt = f"Context:\n{context_str}\n\nQuestion: {req.query}"
     
-    llm_model = "gemini-2.5-flash"
+    llm_model = "gemini-3.8-flash"
     
-    response = openai_client.chat.completions.create(
-        model=llm_model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-        ],
-        temperature=0.0
-    )
-    
-    answer = response.choices[0].message.content
+    for attempt in range(1):
+        try:
+            response = openai_client.chat.completions.create(
+                model=llm_model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.0
+            )
+            answer = response.choices[0].message.content
+            break
+        except Exception as e:
+            answer = "Error: Rate limit exhausted or API unavailable."
+            break
     
     latency_ms = (time.time() - start_time) * 1000
     
