@@ -6,14 +6,14 @@ from qdrant_client.http.models import Distance, VectorParams, PointStruct
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
 COLLECTION_NAME = "chunks"
 CORPUS_VERSION = 1
 DATA_PATH = "data/seed_data.jsonl"
 
 def main():
     print("Initializing Qdrant client and embedding model...")
-    client = QdrantClient(url=QDRANT_URL)
+    client = QdrantClient(path=QDRANT_PATH)
     model = SentenceTransformer('all-MiniLM-L6-v2')
     
     # Initialize Collection

@@ -10,11 +10,11 @@ from app.db import log_request
 
 app = FastAPI(title="Multi-Tenant RAG API - Phase 0")
 
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
 COLLECTION_NAME = "chunks"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-qdrant_client = QdrantClient(url=QDRANT_URL)
+qdrant_client = QdrantClient(path=QDRANT_PATH)
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
