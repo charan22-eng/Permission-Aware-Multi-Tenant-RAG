@@ -15,7 +15,7 @@ app = FastAPI(title="Multi-Tenant RAG API - Phase 0")
 
 QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
 COLLECTION_NAME = "chunks"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 
 qdrant_client = QdrantClient(path=QDRANT_PATH)
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
