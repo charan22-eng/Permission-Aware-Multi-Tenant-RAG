@@ -20,9 +20,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 qdrant_client = QdrantClient(path=QDRANT_PATH)
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 openai_client = OpenAI(
-    api_key=GEMINI_API_KEY,
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    timeout=5.0
+    api_key="ollama",
+    base_url="http://localhost:11434/v1"
 )
 
 class QueryRequest(BaseModel):
@@ -70,7 +69,7 @@ def query_endpoint(req: QueryRequest):
     
     user_prompt = f"Context:\n{context_str}\n\nQuestion: {req.query}"
     
-    llm_model = "gemini-3.8-flash"
+    llm_model = "llama3.1"
     
     for attempt in range(1):
         try:
