@@ -77,12 +77,12 @@ for i, fact in enumerate(facts):
         "source_chunk_id": paragraphs[i]["id"]
     })
 
-with open("seed_data.jsonl", "w") as f:
+with open("data/seed_data.jsonl", "w") as f:
     for p in paragraphs:
-        f.write(json.dumps(p) + "\\n")
+        f.write(json.dumps(p) + "\n")
 
-with open("eval_questions.jsonl", "w") as f:
+with open("eval/questions.jsonl", "w") as f:
     for e in eval_data:
-        f.write(json.dumps(e) + "\\n")
+        f.write(json.dumps(e) + "\n")
 
 print("Generated seed_data.jsonl and eval_questions.jsonl")
