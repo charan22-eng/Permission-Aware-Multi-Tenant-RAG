@@ -7,6 +7,9 @@ from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 from app.db import log_request
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Multi-Tenant RAG API - Phase 0")
 

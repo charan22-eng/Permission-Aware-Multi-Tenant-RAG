@@ -5,6 +5,9 @@ from datasets import Dataset
 from ragas import evaluate
 from ragas.metrics import answer_correctness
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_URL = os.getenv("API_URL", "http://localhost:8000/query")
 EVAL_DATA_PATH = "eval/questions.jsonl"
