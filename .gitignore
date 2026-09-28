@@ -1,0 +1,14 @@
+.env
+node_modules/
+__pycache__/
+.venv/
+build/
+dist/
+.DS_Store
+.vscode/
+.idea/
+*.sqlite
+*.db
+qdrant_storage/
+neo4j_data/
+postgres_data/
