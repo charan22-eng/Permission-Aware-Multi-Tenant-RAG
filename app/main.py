@@ -26,10 +26,12 @@ openai_client = OpenAI(
 
 class QueryRequest(BaseModel):
     query: str
+    k: int = 5
 
 class QueryResponse(BaseModel):
     answer: str
-    citations: list[str]
+    context_chunk_ids: list[str]
+    eval_chunk_ids: list[str]
 
 @app.post("/query", response_model=QueryResponse)
 def query_endpoint(req: QueryRequest):
@@ -39,21 +41,26 @@ def query_endpoint(req: QueryRequest):
     # 1. Embed query
     query_vector = embedding_model.encode(req.query).tolist()
     
-    # 2. Retrieve top-5 from Qdrant
+    # Cap k at 10
+    limit_k = min(req.k, 10)
+    
+    # 2. Retrieve top-k from Qdrant
     search_result = qdrant_client.query_points(
         collection_name=COLLECTION_NAME,
         query=query_vector,
-        limit=5
+        limit=limit_k
     ).points
     
     if not search_result:
-        raise HTTPException(status_code=404, detail="No relevant context found.")
+        return QueryResponse(answer="I don't know.", context_chunk_ids=[], eval_chunk_ids=[])
     
     retrieved_chunk_ids = [point.id for point in search_result]
+    context_chunks = search_result[:5]
+    context_chunk_ids = [point.id for point in context_chunks]
     
-    # Construct context for LLM
+    # Construct context for LLM using ONLY top 5 chunks
     context_blocks = []
-    for point in search_result:
+    for point in context_chunks:
         chunk_text = point.payload.get("text", "")
         chunk_id = point.id
         context_blocks.append(f"Chunk ID: {chunk_id}\nContent: {chunk_text}")
@@ -63,7 +70,8 @@ def query_endpoint(req: QueryRequest):
     # 3. Generate answer with inline citations
     system_prompt = (
         "You are a helpful AI assistant. Answer the user's question based ONLY on the provided context.\n"
-        "Include inline citations by referencing the Chunk ID in brackets, e.g. [Chunk ID].\n"
+        "Include an inline citation at the end of your answer by referencing the Chunk ID exactly in brackets, e.g. [Chunk ID].\n"
+        "Do not write 'According to Chunk ID', just append [Chunk ID] to the end of the fact.\n"
         "If you cannot answer based on the context, say 'I don't know'."
     )
     
@@ -79,7 +87,8 @@ def query_endpoint(req: QueryRequest):
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=0.0
+                temperature=0.0,
+                seed=42
             )
             answer = response.choices[0].message.content
             break
@@ -99,4 +108,4 @@ def query_endpoint(req: QueryRequest):
         latency_ms=latency_ms
     )
     
-    return QueryResponse(answer=answer, citations=retrieved_chunk_ids)
+    return QueryResponse(answer=answer, context_chunk_ids=context_chunk_ids, eval_chunk_ids=retrieved_chunk_ids)

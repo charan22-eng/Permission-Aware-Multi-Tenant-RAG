@@ -58,3 +58,13 @@
 {"question": "What is the name of the annual hackathon sponsored by the company?", "reference_answer": "The annual hackathon is named 'ApexHack'.", "source_chunk_id": "38bea5a5-9966-4882-b796-da243b96eef4"}
 {"question": "When does the CEO host the weekly AMA session?", "reference_answer": "The CEO hosts a weekly AMA session on Friday afternoons.", "source_chunk_id": "c668a16d-ccd6-4c44-aed8-48565712bc8d"}
 {"question": "What new work schedule trial was implemented for the summer?", "reference_answer": "A four-day work week trial was implemented for the summer.", "source_chunk_id": "627ed156-f5b6-4627-bca2-05b2ed4be234"}
+{"question": "What is the CEO's favorite color?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "How much does the HealthAI product cost per year?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Are pets allowed in the Silicon Valley office?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What is the WiFi password for the guest network?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Who won the Apex Innovations ping pong tournament in 2021?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Does the company offer a 4-day work week permanently?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What is the stock ticker symbol for Apex Innovations?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "How many employees work at the London regional office?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Who was the CEO before Alice Smith?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What brand of coffee is provided in the break room?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
