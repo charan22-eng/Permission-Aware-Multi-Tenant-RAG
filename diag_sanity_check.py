@@ -109,7 +109,7 @@ for item in test_cases:
     n_qwen = run_judge('qwen2.5:7b', PROMPT_NEW, q, gt, ans)
     f_llama = run_judge('llama3.1', PROMPT_FIXED, q, gt, ans)
     f_qwen = run_judge('qwen2.5:7b', PROMPT_FIXED, q, gt, ans)
-    det = deterministic_key_fact_check(gt, ans)
+    det = deterministic_key_fact_check(q, gt, ans)
     
     results.append({
         'q': q, 'gt': gt, 'ans': ans, 'ctype': ctype,

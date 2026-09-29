@@ -42,9 +42,13 @@ def extract_key_facts(text: str):
     caps = [c for c in caps if c not in stopwords]
     return set(nums + caps)
 
-def deterministic_key_fact_check(ground_truth: str, answer: str) -> int:
+def deterministic_key_fact_check(question: str, ground_truth: str, answer: str) -> int:
     if ground_truth == "": return 1
     facts = extract_key_facts(ground_truth)
+    q_facts = extract_key_facts(question)
+    # Remove facts that are already in the question (prevents false positives for short answers)
+    facts = facts - q_facts
+    
     ans_norm = answer.replace('%', ' percent').lower()
     ans_norm_no_punc = re.sub(r'[^\w\s]', '', ans_norm)
     for f in facts:
@@ -200,7 +204,7 @@ def run_evaluation():
             det_scores.append(None)
             combined_scores.append(None)
         else:
-            d = deterministic_key_fact_check(ground_truths[i], answers[i])
+            d = deterministic_key_fact_check(questions[i], ground_truths[i], answers[i])
             det_scores.append(d)
             if llama_scores[i] == 1 and qwen_scores[i] == 1 and d == 1:
                 combined_scores.append(1)
