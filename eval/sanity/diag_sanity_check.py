@@ -2,6 +2,11 @@ import json
 import re
 from openai import OpenAI
 import time
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+QUESTIONS_PATH = REPO_ROOT / "eval" / "questions.jsonl"
 
 llm = OpenAI(api_key='ollama', base_url='http://localhost:11434/v1')
 
@@ -36,16 +41,27 @@ def extract_key_facts(text: str):
     caps = re.findall(r'\b[A-Z][a-zA-Z]*\b', text)
     stopwords = {'The', 'A', 'An', 'Is', 'Are', 'In', 'On', 'At', 'To', 'From', 'It', 'This', 'That', 'If', 'And', 'Or', 'They', 'We', 'You', 'I'}
     caps = [c for c in caps if c not in stopwords]
-    return set(nums + caps)
+    return set(nums), set(caps)
 
-def deterministic_key_fact_check(ground_truth: str, answer: str) -> int:
-    facts = extract_key_facts(ground_truth)
+def deterministic_key_fact_check(question: str, ground_truth: str, answer: str) -> int:
+    if ground_truth == "": return 1
+    gt_nums, gt_caps = extract_key_facts(ground_truth)
+    q_nums, q_caps = extract_key_facts(question)
+    
+    required_caps = gt_caps - q_caps
     ans_norm = answer.replace('%', ' percent').lower()
     ans_norm_no_punc = re.sub(r'[^\w\s]', '', ans_norm)
-    for f in facts:
+    for f in required_caps:
         f_norm = f.lower()
         if f_norm not in ans_norm and f_norm not in ans_norm_no_punc:
             return 0
+            
+    ans_nums, _ = extract_key_facts(answer)
+    allowed_nums = gt_nums.union(q_nums)
+    for n in ans_nums:
+        if n not in allowed_nums:
+            return 0
+            
     return 1
 
 def run_judge(model, prompt, q, gt, ans):
@@ -80,7 +96,7 @@ corruptions_name = {
 }
 
 questions = []
-with open('eval/questions.jsonl', 'r') as f:
+with open(QUESTIONS_PATH, 'r') as f:
     for i, line in enumerate(f):
         if i >= 30: break
         questions.append(json.loads(line))
@@ -96,6 +112,11 @@ for idx, (ans, desc) in corruptions_name.items():
     test_cases.append((questions[idx], ans, f"Name Corrupt: {desc}"))
 
 results = []
+
+if '--dry-run' in sys.argv:
+    print(f"Dry run. Path: {QUESTIONS_PATH}. Row count: {len(test_cases)}")
+    sys.exit(0)
+
 print("Evaluating 50 test cases...")
 for item in test_cases:
     q = item[0]['question']
