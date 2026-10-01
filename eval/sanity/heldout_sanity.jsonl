@@ -1,0 +1,25 @@
+{"category":"number_swap","reference":"The company offers a 401(k) match up to 5% of the employee's salary.","answer":"The company matches 401(k) contributions up to 6% of salary.","expected":0}
+{"category":"number_swap","reference":"The Board of Directors consists of 7 members.","answer":"The Board of Directors consists of 9 members.","expected":0}
+{"category":"number_swap","reference":"The company was founded in 2010 by CEO Alice Smith.","answer":"The company was founded in 2012 by CEO Alice Smith.","expected":0}
+{"category":"number_swap","reference":"Apex Innovations acquired MedTech Solutions in 2018.","answer":"Apex Innovations acquired MedTech Solutions in 2016.","expected":0}
+{"category":"number_swap","reference":"Employee stock options vest over a four-year period with a one-year cliff.","answer":"Employee stock options vest over a three-year period with a one-year cliff.","expected":0}
+{"category":"negation","reference":"Yes, the data privacy policy is GDPR compliant.","answer":"No, the data privacy policy is not GDPR compliant.","expected":0}
+{"category":"negation","reference":"The company uses AWS for cloud hosting and services.","answer":"The company does not use AWS for cloud hosting.","expected":0}
+{"category":"negation","reference":"The company has won the 'Best Place to Work' award for three consecutive years.","answer":"The company has never won the 'Best Place to Work' award.","expected":0}
+{"category":"negation","reference":"The CEO hosts a weekly AMA session on Friday afternoons.","answer":"The CEO does not host a weekly AMA session.","expected":0}
+{"category":"negation","reference":"The primary data center is located in Ashburn, Virginia.","answer":"The primary data center is not located in Ashburn, Virginia.","expected":0}
+{"category":"extra_claim","reference":"The VP of Sales is Michael Chang.","answer":"The VP of Sales is Michael Chang, who previously worked at Oracle.","expected":0}
+{"category":"extra_claim","reference":"The chief security officer is Sarah Lee.","answer":"The chief security officer is Sarah Lee, who reports directly to the board.","expected":0}
+{"category":"extra_claim","reference":"The headquarters is located at 123 Innovation Drive, Silicon Valley, CA.","answer":"The headquarters is located at 123 Innovation Drive, Silicon Valley, CA, in a building purchased from a former competitor.","expected":0}
+{"category":"extra_claim","reference":"The company uses AWS for cloud hosting and services.","answer":"The company uses AWS for cloud hosting and services, plus a backup contract with Google Cloud.","expected":0}
+{"category":"extra_claim","reference":"The engineering team follows a two-week sprint cycle.","answer":"The engineering team follows a two-week sprint cycle that begins each Monday with a demo session.","expected":0}
+{"category":"partial","reference":"The company was founded in 2010 by CEO Alice Smith.","answer":"The company was founded in 2010.","expected":0}
+{"category":"partial","reference":"Employee stock options vest over a four-year period with a one-year cliff.","answer":"Employee stock options vest over four years.","expected":0}
+{"category":"partial","reference":"The regional offices are located in London, Tokyo, and Sydney.","answer":"The regional offices include London and Tokyo.","expected":0}
+{"category":"partial","reference":"The CEO hosts a weekly AMA session on Friday afternoons.","answer":"The CEO hosts a weekly AMA session.","expected":0}
+{"category":"partial","reference":"The company has won the 'Best Place to Work' award for three consecutive years.","answer":"The company has won the 'Best Place to Work' award.","expected":0}
+{"category":"reword","reference":"The engineering team follows a two-week sprint cycle.","answer":"Sprints for the engineering team last two weeks.","expected":1}
+{"category":"reword","reference":"The company uses AWS for cloud hosting and services.","answer":"Cloud hosting and services run on Amazon Web Services (AWS).","expected":1}
+{"category":"reword","reference":"The chief security officer is Sarah Lee.","answer":"Sarah Lee serves as the chief security officer.","expected":1}
+{"category":"reword","reference":"The company offers a 401(k) match up to 5% of the employee's salary.","answer":"The 401(k) match goes up to 5% of an employee's salary.","expected":1}
+{"category":"reword","reference":"Yes, the data privacy policy is GDPR compliant.","answer":"Yes, the data privacy policy complies with GDPR.","expected":1}
