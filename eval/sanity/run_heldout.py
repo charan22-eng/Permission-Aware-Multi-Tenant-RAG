@@ -1,12 +1,21 @@
 import json
 import csv
+import sys
+from pathlib import Path
 from run_final_sanity import run_judge, deterministic_key_fact_check, PROMPT_FIXED
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+HELDOUT_PATH = REPO_ROOT / "eval" / "sanity" / "heldout_sanity.jsonl"
+
 heldout_cases = []
-with open("eval/heldout_sanity.jsonl", "r") as f:
+with open(HELDOUT_PATH, "r") as f:
     for line in f:
         if line.strip():
             heldout_cases.append(json.loads(line))
+
+if '--dry-run' in sys.argv:
+    print(f"Dry run. Path: {HELDOUT_PATH}. Row count: {len(heldout_cases)}")
+    sys.exit(0)
 
 print("Running llama-judge...", flush=True)
 for c in heldout_cases:
