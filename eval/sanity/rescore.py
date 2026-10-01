@@ -1,5 +1,10 @@
 import pandas as pd
 import re
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+RESULTS_PATH = REPO_ROOT / "eval" / "results_1.csv"
 
 def extract_key_facts(text: str):
     text_no_pct = text.replace('%', ' percent')
@@ -25,7 +30,11 @@ def deterministic_key_fact_check(question: str, ground_truth: str, answer: str):
             break
     return num_pass
 
-df = pd.read_csv("eval/results_1.csv")
+df = pd.read_csv(RESULTS_PATH)
+
+if '--dry-run' in sys.argv:
+    print(f"Dry run. Path: {RESULTS_PATH}. Row count: {len(df)}")
+    sys.exit(0)
 
 old_combined = 0
 new_combined = 0
