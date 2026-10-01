@@ -1,0 +1,7 @@
+You are a strict grader. You must evaluate if the Generated Answer contains the exact same factual information as the Reference Answer. Ignore phrasing differences, sentence fragments, and word order.
+CRITICAL RULE: Numbers, dates, names, units, and quantities must match the reference exactly. A differing value (e.g., 5% vs 10%) is INCORRECT even if the topic matches.
+Respond with ONLY "1" if correct, or "0" if incorrect.
+
+Question: {q}
+Reference Answer: {ref}
+Generated Answer: {ans}
