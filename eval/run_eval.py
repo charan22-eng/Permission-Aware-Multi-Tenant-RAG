@@ -8,7 +8,9 @@ from openai import OpenAI
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-API_URL = os.getenv("API_URL", "http://localhost:8000/query")
+API_PORT = os.getenv("API_PORT", "8001")
+API_URL = os.getenv("API_URL", f"http://localhost:{API_PORT}/query")
+HEALTH_URL = os.getenv("HEALTH_URL", f"http://localhost:{API_PORT}/health")
 EVAL_DATA_PATH = "eval/questions.jsonl"
 RESULTS_PATH = "eval/results.csv"
 
@@ -36,26 +38,42 @@ def clean_answer(ans: str) -> str:
 
 def extract_key_facts(text: str):
     text_no_pct = text.replace('%', ' percent')
-    nums = re.findall(r'\b\d+\b', text_no_pct)
+    # Remove any standalone UUIDs just in case
+    text_no_uuid = re.sub(r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}', '', text_no_pct)
+    nums = re.findall(r'\b\d+\b', text_no_uuid)
     caps = re.findall(r'\b[A-Z][a-zA-Z]*\b', text)
     stopwords = {'The', 'A', 'An', 'Is', 'Are', 'In', 'On', 'At', 'To', 'From', 'It', 'This', 'That', 'If', 'And', 'Or', 'They', 'We', 'You', 'I'}
     caps = [c for c in caps if c not in stopwords]
-    return set(nums + caps)
+    return set(nums), set(caps)
 
-def deterministic_key_fact_check(question: str, ground_truth: str, answer: str) -> int:
-    if ground_truth == "": return 1
-    facts = extract_key_facts(ground_truth)
-    q_facts = extract_key_facts(question)
-    # Remove facts that are already in the question (prevents false positives for short answers)
-    facts = facts - q_facts
+def deterministic_key_fact_check(question: str, ground_truth: str, answer: str):
+    # Returns (numeric_pass: int, cap_pass: int)
+    if ground_truth == "": return 1, 1
     
+    gt_nums, gt_caps = extract_key_facts(ground_truth)
+    q_nums, q_caps = extract_key_facts(question)
+    
+    # 1. Capitalized words from GT must be in Answer (unless already in Question)
+    required_caps = gt_caps - q_caps
     ans_norm = answer.replace('%', ' percent').lower()
     ans_norm_no_punc = re.sub(r'[^\w\s]', '', ans_norm)
-    for f in facts:
+    cap_pass = 1
+    for f in required_caps:
         f_norm = f.lower()
         if f_norm not in ans_norm and f_norm not in ans_norm_no_punc:
-            return 0
-    return 1
+            cap_pass = 0
+            break
+            
+    # 2. Every number in Answer must appear in Reference or Question
+    ans_nums, _ = extract_key_facts(answer)
+    allowed_nums = gt_nums.union(q_nums)
+    num_pass = 1
+    for n in ans_nums:
+        if n not in allowed_nums:
+            num_pass = 0
+            break
+            
+    return num_pass, cap_pass
 
 def evaluate_correctness(model_name: str, question: str, ground_truth: str, answer: str) -> int:
     if "Error: Rate limit exhausted" in answer or not answer.strip():
@@ -67,7 +85,7 @@ Question: {question}
 Reference Answer: {ground_truth}
 Student Answer: {answer}
 
-Is the student's answer correct and factually consistent with the reference answer? Ignore phrasing, sentence fragments, and citation formats. 
+Is the student's answer correct and factually consistent with the reference answer? Ignore phrasing differences, sentence fragments, and word order.
 CRITICAL RULE: Numbers, dates, names, units, and quantities must match the reference exactly. A differing value (e.g., 5% vs 10%) is INCORRECT even if the topic matches.
 Respond with ONLY "1" if correct, or "0" if incorrect."""
     
@@ -76,7 +94,9 @@ Respond with ONLY "1" if correct, or "0" if incorrect."""
             model=model_name,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.0,
-            seed=42
+            seed=42,
+            max_tokens=10,
+            extra_body={"options": {"num_ctx": 2048}}
         )
         result = response.choices[0].message.content.strip()
         if "1" in result:
@@ -104,17 +124,30 @@ def run_evaluation():
     fallback_count = 0
     
     print(f"1. Generating {len(questions)} answers through API...")
+    import time
     for i, q in enumerate(questions):
-        try:
-            resp = requests.post(API_URL, json={"query": q, "k": 10})
-            resp.raise_for_status()
-            res_json = resp.json()
-            ans = res_json["answer"]
-            citations = res_json["eval_chunk_ids"]
-        except Exception as e:
-            print(f"Error on question {i}: {e}")
-            ans = "Error: Rate limit exhausted or API unavailable."
-            citations = []
+        ans = "Error: Rate limit exhausted or API unavailable."
+        citations = []
+        for attempt in range(3):
+            try:
+                # Health check fingerprint verification
+                h_resp = requests.get(HEALTH_URL, timeout=5)
+                h_resp.raise_for_status()
+                h_data = h_resp.json()
+                if h_data.get("project") != "Permission-Aware Multi-Tenant RAG" or h_data.get("corpus_version") != 1:
+                    print(f"Error: Invalid API fingerprint: {h_data}")
+                    raise Exception("Invalid fingerprint")
+                
+                resp = requests.post(API_URL, json={"query": q, "k": 10}, timeout=30)
+                resp.raise_for_status()
+                res_json = resp.json()
+                ans = res_json.get("answer", "")
+                citations = res_json.get("eval_chunk_ids", [])
+                break
+            except Exception as e:
+                if attempt == 2:
+                    print(f"Error on question {i}: {e}")
+                time.sleep(2 ** attempt)
             
         answers.append(ans)
         retrieved_citations_list.append(citations)
@@ -198,15 +231,19 @@ def run_evaluation():
             
     print("5. Calculating deterministic key fact check...")
     det_scores = []
+    cap_scores = []
     combined_scores = []
     for i in range(len(questions)):
         if "Error: Rate limit exhausted" in answers[i] or source_chunk_ids[i] == "unanswerable":
             det_scores.append(None)
+            cap_scores.append(None)
             combined_scores.append(None)
         else:
-            d = deterministic_key_fact_check(questions[i], ground_truths[i], answers[i])
-            det_scores.append(d)
-            if llama_scores[i] == 1 and qwen_scores[i] == 1 and d == 1:
+            ans_clean = clean_answer(answers[i])
+            num_pass, cap_pass = deterministic_key_fact_check(questions[i], ground_truths[i], ans_clean)
+            det_scores.append(num_pass)
+            cap_scores.append(cap_pass)
+            if llama_scores[i] == 1 and qwen_scores[i] == 1 and num_pass == 1:
                 combined_scores.append(1)
             else:
                 combined_scores.append(0)
@@ -227,7 +264,8 @@ def run_evaluation():
         "mrr_10": mrr_10,
         "llama_correctness": llama_scores,
         "qwen_correctness": qwen_scores,
-        "det_correctness": det_scores,
+        "det_numeric_pass": det_scores,
+        "det_cap_pass": cap_scores,
         "combined_correctness": combined_scores,
         "is_abstention": abstentions,
         "source_chunk_id": source_chunk_ids,
