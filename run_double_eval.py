@@ -4,6 +4,8 @@ import pandas as pd
 
 import time
 
+import shutil
+
 def run_eval():
     subprocess.run(["python", "-u", "eval/run_eval.py"], check=True)
 
@@ -12,11 +14,11 @@ time.sleep(15)
 
 print("Starting Run 1...")
 run_eval()
-os.rename("eval/results.csv", "eval/results_1.csv")
+shutil.move("eval/results.csv", "eval/results_1.csv")
 
 print("\nStarting Run 2...")
 run_eval()
-os.rename("eval/results.csv", "eval/results_2.csv")
+shutil.move("eval/results.csv", "eval/results_2.csv")
 
 print("\nComparing Run 1 and Run 2...")
 df1 = pd.read_csv("eval/results_1.csv")
