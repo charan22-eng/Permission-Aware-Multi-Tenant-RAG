@@ -12,3 +12,7 @@ dist/
 qdrant_storage/
 neo4j_data/
 postgres_data/
+
+# Eval test output logs
+eval/logs/
+sanity_*.txt
