@@ -8,7 +8,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
 COLLECTION_NAME = "chunks"
-CORPUS_VERSION = 1
+CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "1"))
 DATA_PATH = "data/seed_data.jsonl"
 
 def main():
