@@ -5,6 +5,13 @@ import sys
 import csv
 from openai import OpenAI
 import httpx
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PROMPT_PATH = REPO_ROOT / "prompts" / "judge_v3_fixed.txt"
+QUESTIONS_PATH = REPO_ROOT / "eval" / "questions.jsonl"
+RESULTS_PATH = REPO_ROOT / "eval" / "results_1.csv"
+SANITY_ROWS_PATH = REPO_ROOT / "eval" / "sanity" / "sanity_rows.csv"
 
 llm = OpenAI(
     api_key='ollama', 
@@ -13,7 +20,7 @@ llm = OpenAI(
     http_client=httpx.Client(timeout=60.0)
 )
 
-with open('prompts/judge_v3_fixed.txt', 'r', encoding='utf-8') as f:
+with open(PROMPT_PATH, 'r', encoding='utf-8') as f:
     PROMPT_FIXED = f.read()
 
 def extract_key_facts(text: str):
@@ -83,7 +90,7 @@ def run_judge(model, prompt, q, gt, ans):
 
 # Load questions
 questions = []
-with open("eval/questions.jsonl", "r") as f:
+with open(QUESTIONS_PATH, "r") as f:
     for line in f:
         if line.strip():
             questions.append(json.loads(line))
@@ -128,7 +135,7 @@ test_cases.append((9, "Inclusion, Integrity, and Innovation are the core values.
 test_cases.append((10, "They give you $500 a year for professional development.", "Reword"))
 
 import pandas as pd
-df = pd.read_csv("eval/results_1.csv")
+df = pd.read_csv(RESULTS_PATH)
 real_answers = []
 for idx, row in df.iterrows():
     if row['source_chunk_id'] == 'unanswerable' or "Error" in row['answer']:
@@ -158,8 +165,13 @@ for tc in real_answers:
 if __name__ == '__main__':
     all_cases = eval_cases + real_eval_cases
 
+    if '--dry-run' in sys.argv:
+        print(f"Dry run. Loaded {len(all_cases)} items.")
+        print(f"Paths: PROMPT={PROMPT_PATH}, QUESTIONS={QUESTIONS_PATH}, RESULTS={RESULTS_PATH}, SANITY_ROWS={SANITY_ROWS_PATH}")
+        sys.exit(0)
+
     print(f"Evaluating {len(all_cases)} items...")
-    with open("sanity_rows.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with open(SANITY_ROWS_PATH, "w", newline="", encoding="utf-8") as csvfile:
         fieldnames = ["ctype", "question", "answer", "llama_f", "qwen_f", "det_num", "comb", "prompt_file"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
