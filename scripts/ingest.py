@@ -6,10 +6,17 @@ from qdrant_client.http.models import Distance, VectorParams, PointStruct
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+import sys
+from pathlib import Path
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(REPO_ROOT))
+from app.db import get_db_connection
+
 QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
-COLLECTION_NAME = "chunks"
-CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "1"))
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "chunks_v2")
+CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "2"))
 DATA_PATH = "data/seed_data.jsonl"
+CHUNK_NAMESPACE = uuid.uuid5(uuid.NAMESPACE_DNS, 'rag.chunks')
 
 def main():
     print("Initializing Qdrant client and embedding model...")
@@ -45,35 +52,51 @@ def main():
 
     points = []
     print("Chunking and embedding documents...")
-    for doc in documents:
-        # Our seed paragraphs are small, so they will likely result in 1 chunk each
-        chunks = text_splitter.create_documents([doc["content"]])
-        
-        for i, chunk in enumerate(chunks):
-            chunk_id = str(uuid.uuid4())
-            text = chunk.page_content
-            embedding = model.encode(text).tolist()
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        for doc in documents:
+            chunks = text_splitter.create_documents([doc["content"]])
             
-            payload = {
-                "document_id": doc["id"],
-                "text": text,
-                "corpus_version": CORPUS_VERSION
-            }
+            tenant_id = "apex"
+            classification = "public"
+            allowed_roles = "[]"
+            allowed_users = "[]"
+            acl_version = 1
             
-            # Since our facts are exactly one paragraph, to allow our exact tests to work 
-            # we want to record the chunk ID properly. 
-            # If our eval questions use the document ID as chunk_id, let's keep the document ID 
-            # as the chunk ID if it is a single chunk, so evaluations hit the exact ID.
-            if len(chunks) == 1:
-                chunk_id = doc["id"]
+            cursor.execute('''
+                INSERT OR REPLACE INTO documents_acl 
+                (document_id, tenant_id, classification, allowed_roles, allowed_users, acl_version)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (doc["id"], tenant_id, classification, allowed_roles, allowed_users, acl_version))
+            
+            for i, chunk in enumerate(chunks):
+                chunk_id = str(uuid.uuid5(CHUNK_NAMESPACE, f"{doc['id']}:{i}"))
+                text = chunk.page_content
+                embedding = model.encode(text).tolist()
                 
-            points.append(
-                PointStruct(
-                    id=chunk_id,
-                    vector=embedding,
-                    payload=payload
+                payload = {
+                    "document_id": doc["id"],
+                    "tenant_id": tenant_id,
+                    "classification": classification,
+                    "allowed_roles": json.loads(allowed_roles),
+                    "allowed_users": json.loads(allowed_users),
+                    "acl_version": acl_version,
+                    "text": text,
+                    "corpus_version": CORPUS_VERSION
+                }
+                
+                if not payload.get("tenant_id"):
+                    print(f"Refusing to ingest chunk {chunk_id} without tenant_id")
+                    continue
+                    
+                points.append(
+                    PointStruct(
+                        id=chunk_id,
+                        vector=embedding,
+                        payload=payload
+                    )
                 )
-            )
+        conn.commit()
 
     print(f"Upserting {len(points)} points into Qdrant...")
     client.upsert(

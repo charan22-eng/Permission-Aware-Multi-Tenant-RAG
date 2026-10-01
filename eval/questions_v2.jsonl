@@ -1,0 +1,70 @@
+{"question": "When was Apex Innovations founded and by whom?", "reference_answer": "Apex Innovations was founded in 2010 by CEO Alice Smith.", "source_chunk_id": "c64cbaef-9f20-56d4-ac01-e3a3aa417d50"}
+{"question": "Where is the headquarters of Apex Innovations located?", "reference_answer": "The headquarters is located at 123 Innovation Drive, Silicon Valley, CA.", "source_chunk_id": "4f17715b-0411-54ca-ace3-2300191223b1"}
+{"question": "What industry does Apex Innovations specialize in?", "reference_answer": "Apex Innovations specializes in AI-driven enterprise solutions for the healthcare industry.", "source_chunk_id": "02076394-1005-5f49-b777-f5541d18a15e"}
+{"question": "What is the flagship product of Apex Innovations and when was it launched?", "reference_answer": "The flagship product is HealthAI, launched in 2015.", "source_chunk_id": "a1cf4b63-4ce2-54ac-9f7d-78ed110951df"}
+{"question": "How many days of paid time off do employees receive per year?", "reference_answer": "Employees receive 20 days of paid time off per year.", "source_chunk_id": "71c56d1c-55d4-59af-b047-353fa6ba84c1"}
+{"question": "What are the standard working hours at Apex Innovations?", "reference_answer": "The standard working hours are from 9 AM to 5 PM, Monday through Friday.", "source_chunk_id": "ff6a2366-8b47-54cc-bf31-c7556b5ce774"}
+{"question": "How many days a week are employees allowed to work remotely?", "reference_answer": "Employees are allowed to work remotely for up to 2 days a week.", "source_chunk_id": "dce4c7fb-a8b0-5d51-8356-7456df82e48f"}
+{"question": "What is the company's 401(k) match policy?", "reference_answer": "The company offers a 401(k) match up to 5% of the employee's salary.", "source_chunk_id": "a21035da-ef68-51b9-af35-ce7103623350"}
+{"question": "When are annual performance reviews conducted?", "reference_answer": "Annual performance reviews are conducted every November.", "source_chunk_id": "32e4777b-e355-5375-9380-6a8c23145183"}
+{"question": "What are the core values of Apex Innovations?", "reference_answer": "The core values are Integrity, Innovation, and Inclusion.", "source_chunk_id": "e45035fc-89bb-5d32-b738-4398d8d4376a"}
+{"question": "What is the annual allowance for professional development courses?", "reference_answer": "Employees can expense up to $500 per year for professional development courses.", "source_chunk_id": "103c9f16-344a-57f6-917d-3fc4c01c61d4"}
+{"question": "What types of insurance coverage does the company provide?", "reference_answer": "The company provides full health, dental, and vision insurance coverage.", "source_chunk_id": "7a0a5aa5-6ce2-5f9a-9251-2b5b656c0c56"}
+{"question": "How many weeks of fully paid leave are included in the maternity leave policy?", "reference_answer": "The maternity leave policy includes 12 weeks of fully paid leave.", "source_chunk_id": "b2da531e-1cfe-5fa8-82cc-2934b3da77ed"}
+{"question": "What is the paternity leave policy at Apex Innovations?", "reference_answer": "The paternity leave policy includes 4 weeks of fully paid leave.", "source_chunk_id": "062bcb5d-6185-5f62-aa32-96c340befbbf"}
+{"question": "Where is the primary data center located?", "reference_answer": "The primary data center is located in Ashburn, Virginia.", "source_chunk_id": "2a52c297-4444-500d-97f2-9fc541177bb6"}
+{"question": "Which cloud provider does Apex Innovations use?", "reference_answer": "The company uses AWS for cloud hosting and services.", "source_chunk_id": "80bb8cf4-0ead-5272-8b4a-bde25175ee24"}
+{"question": "When are the company's all-hands meetings held?", "reference_answer": "All-hands meetings are held on the first Monday of every month.", "source_chunk_id": "65340ec5-b6a2-58a4-9d8c-274a50184681"}
+{"question": "Which company did Apex Innovations acquire in 2018?", "reference_answer": "Apex Innovations acquired MedTech Solutions in 2018.", "source_chunk_id": "93c3ff15-5513-5c25-b28d-cfa845cdb11c"}
+{"question": "Who is the CTO of Apex Innovations and when did he join?", "reference_answer": "The CTO is Bob Jones, who joined in 2012.", "source_chunk_id": "e65096f3-d8bc-59ec-9fef-eb7a319084dc"}
+{"question": "Where does the annual company retreat take place?", "reference_answer": "The annual company retreat takes place in Lake Tahoe every summer.", "source_chunk_id": "25f63538-ee39-59ba-a61e-cf7ea3b5f244"}
+{"question": "When is the deadline to submit expense reports?", "reference_answer": "Expense reports must be submitted by the 5th of the following month.", "source_chunk_id": "76ef5f90-d7c8-58ce-8f46-173adcc6114a"}
+{"question": "What is the employee referral bonus for successful hires?", "reference_answer": "The employee referral bonus is $2000 for successful hires.", "source_chunk_id": "5ec9986b-5a58-52bc-8fde-852dc37eb0b8"}
+{"question": "How much is the monthly stipend for home internet?", "reference_answer": "The company provides a monthly stipend of $50 for home internet.", "source_chunk_id": "6a23e69a-ee65-5953-bfc6-4369527177ef"}
+{"question": "What are the operating hours of the customer support team?", "reference_answer": "The customer support team operates 24/7 in three global shifts.", "source_chunk_id": "53d37dbb-84d3-5251-9e19-362819fab525"}
+{"question": "What is the company dress code?", "reference_answer": "The company dress code is business casual.", "source_chunk_id": "926357f8-a809-55f7-89c3-730860c56a0f"}
+{"question": "What is the primary internal communication tool used?", "reference_answer": "Slack is the primary internal communication tool used.", "source_chunk_id": "3358677f-f6c3-56d4-bb01-691688e7ff08"}
+{"question": "What is the name of the company intranet?", "reference_answer": "The company intranet is named 'ApexHub'.", "source_chunk_id": "0ac95bba-3c54-5219-a8c6-48679cb39b05"}
+{"question": "Who is the main competitor of Apex Innovations?", "reference_answer": "The main competitor is HealthTech Dynamics.", "source_chunk_id": "83e1781b-0800-56a7-a04f-3c7b00e1c9ea"}
+{"question": "When did Apex Innovations surpass $100 million in ARR?", "reference_answer": "Apex Innovations surpassed $100 million in ARR in 2021.", "source_chunk_id": "c1b00d20-1e2f-5a5c-af36-d8ffd4e918e6"}
+{"question": "How many members are on the Board of Directors?", "reference_answer": "The Board of Directors consists of 7 members.", "source_chunk_id": "bf9b0a65-28db-58f2-9f64-285a91a7449f"}
+{"question": "When are employees eligible for a sabbatical?", "reference_answer": "Employees are eligible for a sabbatical after 5 years of continuous service.", "source_chunk_id": "4841bbca-c441-5f21-9711-2e50ac524be2"}
+{"question": "What day is free lunch offered for in-office employees?", "reference_answer": "Free lunch is offered on Fridays for in-office employees.", "source_chunk_id": "6b8c4256-e0e6-5167-b2b0-80fbd7509671"}
+{"question": "How long is the sprint cycle for the engineering team?", "reference_answer": "The engineering team follows a two-week sprint cycle.", "source_chunk_id": "922da4df-177a-5808-a48b-8bca233c7762"}
+{"question": "Who is the chief security officer?", "reference_answer": "The chief security officer is Sarah Lee.", "source_chunk_id": "50f15b8a-46e2-5a14-84b7-7d36fdf9fa96"}
+{"question": "When must employees complete the annual security awareness training?", "reference_answer": "Annual security awareness training must be completed in January.", "source_chunk_id": "5dcbcdc6-ff86-5cf0-b4d8-c24441ab4c65"}
+{"question": "By what year does the company aim to be carbon neutral?", "reference_answer": "The company aims to be carbon neutral by 2030.", "source_chunk_id": "4da17179-38fb-52ec-a125-5c074289553f"}
+{"question": "What is the vesting schedule for employee stock options?", "reference_answer": "Employee stock options vest over a four-year period with a one-year cliff.", "source_chunk_id": "86238a36-7ca3-5bd7-abd3-5c601e06596a"}
+{"question": "Which department is the largest and how many members does it have?", "reference_answer": "The marketing department is the largest with 150 members.", "source_chunk_id": "f460d1f9-46d0-5b08-8905-0f5cd04ea7a0"}
+{"question": "Where are the regional offices located?", "reference_answer": "The regional offices are located in London, Tokyo, and Sydney.", "source_chunk_id": "a5009af8-9a06-55f1-bae1-7cd94aef1809"}
+{"question": "What is the name of the company mascot?", "reference_answer": "The company mascot is a robot named 'Sparky'.", "source_chunk_id": "5f117b3f-1bce-5c1d-902e-2d2b3c7ea991"}
+{"question": "What is the standard laptop provided to engineers?", "reference_answer": "The standard laptop provided to engineers is a 16-inch MacBook Pro.", "source_chunk_id": "e4ec4a21-dd4b-549a-a865-b9a3b1f423d0"}
+{"question": "When is the Q3 planning session typically held?", "reference_answer": "The Q3 planning session is typically held in July.", "source_chunk_id": "4c2aad06-2c35-59f5-bd65-0a734a2b953b"}
+{"question": "When was the mobile application released and on what platforms?", "reference_answer": "The mobile application was released on iOS and Android in 2017.", "source_chunk_id": "c2892a38-f55e-5aec-a151-6f028e6d3ddc"}
+{"question": "How many days of paid volunteer leave are employees allowed to take?", "reference_answer": "Employees can take up to 3 days of paid volunteer leave per year.", "source_chunk_id": "8c64127b-f125-545a-a343-a5a70a79e7dc"}
+{"question": "What is the company's primary color code?", "reference_answer": "The company's primary color code is #1A5276 (dark blue).", "source_chunk_id": "1c66d1c1-3089-549d-94a1-b20f8d1e575b"}
+{"question": "What tool is used for project management and issue tracking?", "reference_answer": "Jira is used for project management and issue tracking.", "source_chunk_id": "7e4b9808-bea7-5871-aa90-7e563bd7d6c9"}
+{"question": "When is the annual holiday party held?", "reference_answer": "The annual holiday party is held in the second week of December.", "source_chunk_id": "cf3a5d23-8052-5deb-ae3d-70fb240291e5"}
+{"question": "How many times has the company won the 'Best Place to Work' award?", "reference_answer": "The company has won the 'Best Place to Work' award for three consecutive years.", "source_chunk_id": "e38da4e7-cff1-5db8-9f6e-b7ef0f9b7f49"}
+{"question": "Is the company's data privacy policy GDPR compliant?", "reference_answer": "Yes, the data privacy policy is GDPR compliant.", "source_chunk_id": "e92350c2-8e56-51f7-b1be-2205b07ea444"}
+{"question": "Who is the VP of Sales?", "reference_answer": "The VP of Sales is Michael Chang.", "source_chunk_id": "e0fb7772-1fb5-52b4-9578-1d2bb6428878"}
+{"question": "Is there an onsite gym at the headquarters?", "reference_answer": "Yes, there is an onsite gym available at the headquarters.", "source_chunk_id": "0b74af49-a72e-586b-9f23-6c97bcb11317"}
+{"question": "How much did the company match in employee charitable donations last year?", "reference_answer": "The company matched $500,000 in employee charitable donations last year.", "source_chunk_id": "16621a09-5655-5f57-a660-603fa435b398"}
+{"question": "What was the customer retention rate in the last fiscal year?", "reference_answer": "The customer retention rate was 95% in the last fiscal year.", "source_chunk_id": "544beabd-25f5-5595-91b3-14a44e7757cf"}
+{"question": "What extension can be used to reach the IT support desk?", "reference_answer": "The IT support desk can be reached at extension 4357 (HELP).", "source_chunk_id": "eb6e2c9b-2c30-577b-98e9-87946e43e9eb"}
+{"question": "What is the payroll schedule at Apex Innovations?", "reference_answer": "The company uses a bi-weekly payroll schedule.", "source_chunk_id": "6d3e6f8a-40d6-535d-aa83-d5f724e3c61d"}
+{"question": "What bonus do employees receive on their 5-year work anniversary?", "reference_answer": "Employees receive a $1000 bonus on their 5-year work anniversary.", "source_chunk_id": "1e81bec4-9e9e-5267-99f9-87674816471b"}
+{"question": "When was the internal mentorship program started?", "reference_answer": "The internal mentorship program was started in 2020.", "source_chunk_id": "55ea826e-0b2d-5465-bc15-ddc372663fbe"}
+{"question": "What is the name of the annual hackathon sponsored by the company?", "reference_answer": "The annual hackathon is named 'ApexHack'.", "source_chunk_id": "3a95e682-8cd4-567f-a016-afb9feb9b59a"}
+{"question": "When does the CEO host the weekly AMA session?", "reference_answer": "The CEO hosts a weekly AMA session on Friday afternoons.", "source_chunk_id": "02811ddb-be58-59b2-8f88-a70f840071f7"}
+{"question": "What new work schedule trial was implemented for the summer?", "reference_answer": "A four-day work week trial was implemented for the summer.", "source_chunk_id": "711e4803-b0ae-54f4-ba2a-4965caba11b7"}
+{"question": "What is the CEO's favorite color?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "How much does the HealthAI product cost per year?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Are pets allowed in the Silicon Valley office?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What is the WiFi password for the guest network?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Who won the Apex Innovations ping pong tournament in 2021?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Does the company offer a 4-day work week permanently?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What is the stock ticker symbol for Apex Innovations?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "How many employees work at the London regional office?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "Who was the CEO before Alice Smith?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}
+{"question": "What brand of coffee is provided in the break room?", "reference_answer": "I don't know.", "source_chunk_id": "unanswerable"}

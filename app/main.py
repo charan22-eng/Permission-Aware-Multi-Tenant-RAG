@@ -14,7 +14,7 @@ load_dotenv()
 app = FastAPI(title="Multi-Tenant RAG API - Phase 0")
 
 QDRANT_PATH = os.getenv("QDRANT_PATH", "qdrant_storage")
-COLLECTION_NAME = "chunks"
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "chunks_v2")
 
 
 qdrant_client = QdrantClient(path=QDRANT_PATH)
@@ -33,7 +33,7 @@ class QueryResponse(BaseModel):
     context_chunk_ids: list[str]
     eval_chunk_ids: list[str]
 
-CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "1"))
+CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "2"))
 
 @app.get("/health")
 def health_check():

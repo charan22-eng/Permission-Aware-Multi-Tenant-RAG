@@ -20,6 +20,16 @@ def init_db():
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS documents_acl (
+                document_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                classification TEXT NOT NULL,
+                allowed_roles TEXT NOT NULL,
+                allowed_users TEXT NOT NULL,
+                acl_version INTEGER NOT NULL
+            )
+        ''')
         conn.commit()
 
 @contextmanager
