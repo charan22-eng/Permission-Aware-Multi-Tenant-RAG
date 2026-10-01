@@ -33,6 +33,12 @@ class QueryResponse(BaseModel):
     context_chunk_ids: list[str]
     eval_chunk_ids: list[str]
 
+CORPUS_VERSION = int(os.getenv("CORPUS_VERSION", "1"))
+
+@app.get("/health")
+def health_check():
+    return {"project": "Permission-Aware Multi-Tenant RAG", "corpus_version": CORPUS_VERSION}
+
 @app.post("/query", response_model=QueryResponse)
 def query_endpoint(req: QueryRequest):
     start_time = time.time()
