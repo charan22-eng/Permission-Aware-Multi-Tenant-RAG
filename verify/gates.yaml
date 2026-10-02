@@ -1,0 +1,770 @@
+- id: G0.1
+  phase: 0
+  type: HARD
+  title: '`curl` `/health` (`project_ok`, `corpus_version_matches_env`)'
+  command: python verify/gates/g0_1.py
+  rule: both true
+  evidence_dir: docs/evidence/phase0
+- id: G0.2
+  phase: 0
+  type: HARD
+  title: listeners on 8001 (`listeners`, `pid_is_ours`)
+  command: python verify/gates/g0_2.py
+  rule: '`listeners==1` and `pid_is_ours`'
+  evidence_dir: docs/evidence/phase0
+- id: G0.3
+  phase: 0
+  type: SOFT
+  title: two sequential 70-question runs, deterministic columns only (`rows`, `diff_rows`,
+    `errors`)
+  command: python verify/gates/g0_3.py
+  rule: '`rows==70 and diff_rows==0 and errors==0`; if it fails, record `noise_floor_questions=diff_rows`
+    and treat any later delta of that size as noise'
+  evidence_dir: docs/evidence/phase0
+- id: G0.4
+  phase: 0
+  type: SOFT
+  title: Hit@5, Recall@10, MRR@10 with Wilson CIs (`hit5`, `recall10`, `mrr10`)
+  command: python verify/gates/g0_4.py
+  rule: '`hit5>=0.93 and recall10>=0.97`'
+  evidence_dir: docs/evidence/phase0
+- id: G0.5
+  phase: 0
+  type: SOFT
+  title: combined correctness under the frozen scorer on run 1 (`combined`, `ci_low`,
+    `differing_rows_vs_reference`)
+  command: python verify/gates/g0_5.py
+  rule: '`combined>=0.90`; differing rows vs the earlier 0.967 run listed in evidence'
+  evidence_dir: docs/evidence/phase0
+- id: G0.6
+  phase: 0
+  type: SOFT
+  title: held-out set run once (`number_swap_negation_catch` of 10, `reword_false_fail`
+    of 5, plus report-only `extra_claim_catch`, `partial_catch` of 5 each)
+  command: python verify/gates/g0_6.py
+  rule: '`number_swap_negation_catch>=9 and reword_false_fail<=1`'
+  evidence_dir: docs/evidence/phase0
+- id: G0.7
+  phase: 0
+  type: SOFT
+  title: sanity set re-run, rows committed (`rows_nonempty`, `number_swap_catch`,
+    `reword_false_fail`, `numeric_false_fail_rate_valid`)
+  command: python verify/gates/g0_7.py
+  rule: '`rows_nonempty and number_swap_catch>=9 and reword_false_fail<=2 and numeric_false_fail_rate_valid<0.05`
+    (denominator excludes Q0 and Q2)'
+  evidence_dir: docs/evidence/phase0
+- id: G0.8
+  phase: 0
+  type: SOFT
+  title: '`ollama ps` during passes (`judge_processor`, `judge_context`)'
+  command: python verify/gates/g0_8.py
+  rule: '`judge_processor=="100% GPU" and judge_context==2048`'
+  evidence_dir: docs/evidence/phase0
+- id: G0.9
+  phase: 0
+  type: SOFT
+  title: unanswerable set (`abstain` of 10, `false_abstain` of 60, `unreviewed_nonabstain`)
+  command: python verify/gates/g0_9.py
+  rule: '`abstain>=9 and false_abstain<=2`; each non-abstained answer is classified
+    by qwen as supported or unsupported and listed'
+  evidence_dir: docs/evidence/phase0
+- id: G0.10
+  phase: 0
+  type: HARD
+  title: '`check_frozen.py`, tag `eval-v1`, hashes recomputed (`hashes_match`, `tag_exists`)'
+  command: python verify/gates/g0_10.py
+  rule: both true
+  evidence_dir: docs/evidence/phase0
+- id: G0.11
+  phase: 0
+  type: SOFT
+  title: README limitations present (`items_found` of 5)
+  command: python verify/gates/g0_11.py
+  rule: '`items_found==5`'
+  evidence_dir: docs/evidence/phase0
+- id: G0.12
+  phase: 0
+  type: HARD
+  title: '`check_evidence.py` (`zero_byte`, `modified_or_deleted`)'
+  command: python verify/gates/g0_12.py
+  rule: both 0
+  evidence_dir: docs/evidence/phase0
+- id: G0.13
+  phase: 0
+  type: HARD
+  title: frozen files unchanged between `e0d55b5` and `HEAD` (`changed_files`)
+  command: python verify/gates/g0_13.py
+  rule: empty list (otherwise follow step 2 and document)
+  evidence_dir: docs/evidence/phase0
+- id: G0.14
+  phase: 0
+  type: SOFT
+  title: rerun vs reference (`combined_diff_questions`)
+  command: python verify/gates/g0_14.py
+  rule: '`<=2`'
+  evidence_dir: docs/evidence/phase0
+- id: G1.1
+  phase: 1
+  type: HARD
+  title: ingest twice, compare IDs (`ids_equal`)
+  command: python verify/gates/g1_1.py
+  rule: 'true'
+  evidence_dir: docs/evidence/phase1
+- id: G1.2
+  phase: 1
+  type: SOFT
+  title: question migration (`unmapped`)
+  command: python verify/gates/g1_2.py
+  rule: '`==0` (else each listed with reason)'
+  evidence_dir: docs/evidence/phase1
+- id: G1.3
+  phase: 1
+  type: HARD
+  title: payload completeness on all points (`points`, `missing_fields`)
+  command: python verify/gates/g1_3.py
+  rule: '`missing_fields==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.4
+  phase: 1
+  type: HARD
+  title: ingestion refuses a chunk without `tenant_id` (`refused`, `stored`)
+  command: python verify/gates/g1_4.py
+  rule: '`refused and stored==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.5
+  phase: 1
+  type: HARD
+  title: old collection `chunks` untouched (`count_before`, `count_after`)
+  command: python verify/gates/g1_5.py
+  rule: equal
+  evidence_dir: docs/evidence/phase1
+- id: G1.6
+  phase: 1
+  type: SOFT
+  title: regression on `chunks_v2` (apex, employee, original 60) (`misses_subset_of_q0_q2`,
+    `hit5`, `combined`)
+  command: python verify/gates/g1_6.py
+  rule: '`misses_subset_of_q0_q2 and hit5>=0.93 and combined>=0.90`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.7
+  phase: 1
+  type: HARD
+  title: 'JWT rejections: `alg=none`, bad signature, expired, each missing claim,
+    unknown tenant, roles not a list (`cases`, `rejected_401`, `generic_body`)'
+  command: python verify/gates/g1_7.py
+  rule: '`rejected_401==cases and generic_body`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.8
+  phase: 1
+  type: HARD
+  title: body/query identity ignored + mutation M4 (`server_used_token_tenant`, `m4_fails_test`)
+  command: python verify/gates/g1_8.py
+  rule: both true
+  evidence_dir: docs/evidence/phase1
+- id: G1.9
+  phase: 1
+  type: SOFT
+  title: token script mints every persona (`personas_minted`)
+  command: python verify/gates/g1_9.py
+  rule: '`== number of personas in tenants.yaml`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.10
+  phase: 1
+  type: HARD
+  title: 'Layer 1 unit cases: tenant mismatch, "tenant matches but no role/user match",
+    role grant, user grant + mutation M1 (`cases_pass`, `m1_fails_layer1_tests`)'
+  command: python verify/gates/g1_10.py
+  rule: both true
+  evidence_dir: docs/evidence/phase1
+- id: G1.11
+  phase: 1
+  type: HARD
+  title: Layer 2 catches broken Layer 1 (`leaks`, `alerts`) with Layer 1 disabled
+  command: python verify/gates/g1_11.py
+  rule: '`leaks==0 and alerts>0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.12
+  phase: 1
+  type: HARD
+  title: revoke in `documents_acl` while Qdrant payload update fails; next query blocked
+    + mutation M6 (`blocked`, `m6_fails_test`)
+  command: python verify/gates/g1_12.py
+  rule: both true
+  evidence_dir: docs/evidence/phase1
+- id: G1.13
+  phase: 1
+  type: HARD
+  title: missing or mismatched ACL row fails closed (`dropped_and_alerted`)
+  command: python verify/gates/g1_13.py
+  rule: 'true'
+  evidence_dir: docs/evidence/phase1
+- id: G1.14
+  phase: 1
+  type: HARD
+  title: 'AST scan: only `app/retrieval.py` imports the Qdrant client; control query
+    unreachable from routes (`violations`)'
+  command: python verify/gates/g1_14.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.15
+  phase: 1
+  type: HARD
+  title: admin cannot retrieve board minutes; named user can + mutation M5 (`admin_blocked`,
+    `named_user_allowed`, `m5_fails_test`)
+  command: python verify/gates/g1_15.py
+  rule: all true
+  evidence_dir: docs/evidence/phase1
+- id: G1.16
+  phase: 1
+  type: HARD
+  title: citations only for authorized prompt-reaching chunks; eval fields absent
+    without `EVAL_MODE` + admin; `k` capped + mutation M7 (`citation_violations`,
+    `eval_field_leaks`, `k_cap_ok`, `m7_fails_test`)
+  command: python verify/gates/g1_16.py
+  rule: '`0, 0, true, true`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.17
+  phase: 1
+  type: HARD
+  title: audit UPDATE and DELETE abort + mutation M8 (`update_blocked`, `delete_blocked`,
+    `m8_fails_test`)
+  command: python verify/gates/g1_17.py
+  rule: all true
+  evidence_dir: docs/evidence/phase1
+- id: G1.18
+  phase: 1
+  type: HARD
+  title: audit completeness over N requests; trace retrievable (`null_fields`, `traces_found_rate`)
+  command: python verify/gates/g1_18.py
+  rule: '`null_fields==0 and traces_found_rate==1.0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.19
+  phase: 1
+  type: HARD
+  title: who-retrieved endpoint scoping (`own_tenant_ok`, `other_tenant_response_identical_to_nonexistent`,
+    `non_admin_denied`)
+  command: python verify/gates/g1_19.py
+  rule: all true
+  evidence_dir: docs/evidence/phase1
+- id: G1.20
+  phase: 1
+  type: SOFT
+  title: three tenants built (`tenants`, `docs_per_tenant_class`)
+  command: python verify/gates/g1_20.py
+  rule: 'apex: 60 facts public/internal + 6 new docs + 1 injection doc; northwind
+    and helix: about 10 docs each across public, internal, confidential (>=3 each
+    class)'
+  evidence_dir: docs/evidence/phase1
+- id: G1.21
+  phase: 1
+  type: SOFT
+  title: overlap by design (`shared_topics`, `shared_names`)
+  command: python verify/gates/g1_21.py
+  rule: '`shared_topics>=5 and shared_names>=2`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.22
+  phase: 1
+  type: HARD
+  title: canaries (`confidential_docs`, `with_canary`, `duplicates`, `canary_in_nonconfidential`)
+  command: python verify/gates/g1_22.py
+  rule: '`with_canary==confidential_docs and duplicates==0 and canary_in_nonconfidential==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.23
+  phase: 1
+  type: SOFT
+  title: injection documents (`apex_has`, `helix_has`)
+  command: python verify/gates/g1_23.py
+  rule: both true
+  evidence_dir: docs/evidence/phase1
+- id: G1.24
+  phase: 1
+  type: SOFT
+  title: attack matrix size (`cases`)
+  command: python verify/gates/g1_24.py
+  rule: '`>=150`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.25
+  phase: 1
+  type: HARD
+  title: cross-tenant and same-tenant escalation over the matrix (`leaks_in_retrieval`,
+    `leaks_in_prompt`, `leaks_in_response`)
+  command: python verify/gates/g1_25.py
+  rule: all 0 (leak = any canary or forbidden chunk ID)
+  evidence_dir: docs/evidence/phase1
+- id: G1.26
+  phase: 1
+  type: HARD
+  title: token tampering matrix (`cases`, `rejected`)
+  command: python verify/gates/g1_26.py
+  rule: '`rejected==cases`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.27
+  phase: 1
+  type: HARD
+  title: request-body injection cases (`leaks`)
+  command: python verify/gates/g1_27.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.28
+  phase: 1
+  type: HARD
+  title: revoke then next query (`retrieved_after_revoke`)
+  command: python verify/gates/g1_28.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.29
+  phase: 1
+  type: HARD
+  title: indirect injection, `tests/local` (`foreign_canary_leaks`, report-only `injection_ok_rate`
+    with CI)
+  command: python verify/gates/g1_29.py
+  rule: '`foreign_canary_leaks==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.30
+  phase: 1
+  type: HARD
+  title: mutation harness M1 to M8 (`mutants`, `behaved_as_expected`), workflow file
+    valid (`workflow_valid`)
+  command: python verify/gates/g1_30.py
+  rule: '`behaved_as_expected==mutants and workflow_valid`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.31
+  phase: 1
+  type: SOFT
+  title: new-tenant answerable questions, by construction (`per_tenant_min`, `gt_found_rate`)
+  command: python verify/gates/g1_31.py
+  rule: '`per_tenant_min>=20 and gt_found_rate==1.0`; also report apex/employee 60-question
+    hit@5 on `chunks_mt`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.32
+  phase: 1
+  type: SOFT
+  title: '`abstain_forbidden` set (`count`, `acl_violations`)'
+  command: python verify/gates/g1_32.py
+  rule: '`count>=20 and acl_violations==0` (each question''s answer fact exists only
+    in documents the persona cannot access, checked by the ACL function)'
+  evidence_dir: docs/evidence/phase1
+- id: G1.33
+  phase: 1
+  type: HARD
+  title: full extended eval, leak count from traces (`leaks`)
+  command: python verify/gates/g1_33.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.34
+  phase: 1
+  type: REPORT
+  title: correct-refusal rate for `abstain_forbidden` with CI (`refusal_rate`)
+  command: python verify/gates/g1_34.py
+  rule: produced
+  evidence_dir: docs/evidence/phase1
+- id: G1.35
+  phase: 1
+  type: REPORT
+  title: filtering overhead, filtered vs unfiltered control, same run conditions (`n`,
+    `p50_overhead_ms`, `p95_overhead_ms`)
+  command: python verify/gates/g1_35.py
+  rule: '`n>=200`'
+  evidence_dir: docs/evidence/phase1
+- id: G1.36
+  phase: 1
+  type: SOFT
+  title: two sequential identical runs of the extended eval (`diff_rows`)
+  command: python verify/gates/g1_36.py
+  rule: '`==0` (else record noise floor)'
+  evidence_dir: docs/evidence/phase1
+- id: G1.37
+  phase: 1
+  type: SOFT
+  title: '`THREAT_MODEL.md` structure check (`sections_found`)'
+  command: python verify/gates/g1_37.py
+  rule: has Assets, Actors, Trust boundaries, Attack table, Residual risks (token
+    role-change lag, writable ACL table and droppable triggers, audit log is itself
+    sensitive), OWASP names with edition note
+  evidence_dir: docs/evidence/phase1
+- id: G1.38
+  phase: 1
+  type: SOFT
+  title: '`docs/design/phase1_self_review.md` (`least_confident_section`, `residual_risks`)'
+  command: python verify/gates/g1_38.py
+  rule: section present and `>=3` residual risks
+  evidence_dir: docs/evidence/phase1
+- id: G1.39
+  phase: 1
+  type: HARD
+  title: 'side channels: forbidden vs nonexistent (`status_identical`, `body_identical`;
+    report-only `latency_ratio`)'
+  command: python verify/gates/g1_39.py
+  rule: both identical true
+  evidence_dir: docs/evidence/phase1
+- id: G1.40
+  phase: 1
+  type: SOFT
+  title: README Phase 1 table generated by script and claims check (`unmatched_numbers`)
+  command: python verify/gates/g1_40.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase1
+- id: G2.1
+  phase: 2
+  type: HARD
+  title: lookup filter includes tenant, scope, corpus_version (`key_fields_ok`)
+  command: python verify/gates/g2_1.py
+  rule: 'true'
+  evidence_dir: docs/evidence/phase2
+- id: G2.2
+  phase: 2
+  type: HARD
+  title: cross-tenant cache reuse + mutation M10 (`cross_tenant_hits`, `m10_fails_test`)
+  command: python verify/gates/g2_2.py
+  rule: '`0, true`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.3
+  phase: 2
+  type: HARD
+  title: cross-role cache reuse in one tenant + mutation M9 (`cross_role_hits`, `m9_fails_test`)
+  command: python verify/gates/g2_3.py
+  rule: '`0, true`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.4
+  phase: 2
+  type: HARD
+  title: revoke then identical query + mutation M11 (`served_after_revoke`, `evicted`,
+    `m11_fails_test`)
+  command: python verify/gates/g2_4.py
+  rule: '`0, true, true`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.5
+  phase: 2
+  type: HARD
+  title: '`acl_version` bump not served (`served_stale`)'
+  command: python verify/gates/g2_5.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.6
+  phase: 2
+  type: HARD
+  title: '`corpus_version` bump not served (`served_stale`)'
+  command: python verify/gates/g2_6.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.7
+  phase: 2
+  type: HARD
+  title: 'not-cached rules: errors, abstentions, Layer-2-dropped, `allowed_users`
+    sources, `INJECTION-OK`, partial (`stored_violations`)'
+  command: python verify/gates/g2_7.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.8
+  phase: 2
+  type: HARD
+  title: TTL expiry (`served_expired`)
+  command: python verify/gates/g2_8.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.9
+  phase: 2
+  type: SOFT
+  title: threshold sweep 0.85 to 0.97 (`chosen_threshold`, `false_hits_at_chosen`,
+    `paraphrase_hit_rate`, `sweep_complete`)
+  command: python verify/gates/g2_9.py
+  rule: '`false_hits_at_chosen==0 and sweep_complete`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.10
+  phase: 2
+  type: SOFT
+  title: pair sets (`paraphrase`, `near_miss`, `cross_tenant`, `cross_role`, `hash_recorded_before_sweep`)
+  command: python verify/gates/g2_10.py
+  rule: '`>=50, >=50, >=10, >=10, true`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.11
+  phase: 2
+  type: SOFT
+  title: router accuracy on test split (`accuracy_test`, `dev_test_separated`)
+  command: python verify/gates/g2_11.py
+  rule: '`accuracy_test>=0.80 and dev_test_separated`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.12
+  phase: 2
+  type: REPORT
+  title: escalation (`escalation_rate`, `quality_escalated`, `quality_not_escalated`)
+  command: python verify/gates/g2_12.py
+  rule: produced (BLOCKED if no small model)
+  evidence_dir: docs/evidence/phase2
+- id: G2.13
+  phase: 2
+  type: SOFT
+  title: 'benchmark design: original + paraphrased + exact-repeat traffic, same questions
+    through baseline (always-large, no cache) and new system, sequential (`repeat_fraction`,
+    `sequential`, `same_questions`)'
+  command: python verify/gates/g2_13.py
+  rule: '`repeat_fraction>=0.5 and sequential and same_questions`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.14
+  phase: 2
+  type: SOFT
+  title: cost reduction (`cost_reduction_pct_simulated`, `gpu_seconds_reduction_pct`,
+    `labeled_simulated`)
+  command: python verify/gates/g2_14.py
+  rule: '`cost_reduction_pct_simulated>=20 and labeled_simulated`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.15
+  phase: 2
+  type: SOFT
+  title: latency (`p95_change_pct`, `p50_change_pct`, `swap_penalty_ms`)
+  command: python verify/gates/g2_15.py
+  rule: '`p95_change_pct<=0`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.16
+  phase: 2
+  type: SOFT
+  title: quality vs always-large, frozen scorer (`quality_delta`, `quality_delta_ci_low`)
+  command: python verify/gates/g2_16.py
+  rule: '`quality_delta_ci_low>=-0.10` (10-point non-inferiority margin)'
+  evidence_dir: docs/evidence/phase2
+- id: G2.17
+  phase: 2
+  type: HARD
+  title: Phase 1 adversarial suite plus cache cases (`leaks`, `mutants_ok`)
+  command: python verify/gates/g2_17.py
+  rule: '`leaks==0 and mutants_ok`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.18
+  phase: 2
+  type: SOFT
+  title: dashboard (`panels_with_data`, `png_exists`)
+  command: python verify/gates/g2_18.py
+  rule: '`panels_with_data==6 and png_exists`'
+  evidence_dir: docs/evidence/phase2
+- id: G2.19
+  phase: 2
+  type: SOFT
+  title: two sequential benchmark runs (`diff_rows`)
+  command: python verify/gates/g2_19.py
+  rule: '`==0` (else record noise floor)'
+  evidence_dir: docs/evidence/phase2
+- id: G2.20
+  phase: 2
+  type: SOFT
+  title: Phase 1 regression (`phase1_leaks`, `hit5_within_ci`)
+  command: python verify/gates/g2_20.py
+  rule: '`phase1_leaks==0 and hit5_within_ci`'
+  evidence_dir: docs/evidence/phase2
+- id: G3.1
+  phase: 3
+  type: SOFT
+  title: dataset (`source`, `n`, `license_noted`)
+  command: python verify/gates/g3_1.py
+  rule: '`source in {"hotpotqa","FALLBACK-SYNTHETIC"} and n>=30 and license_noted`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.2
+  phase: 3
+  type: SOFT
+  title: benchmark tenant (`all_chunks_tenant_ok`, `acl_public`)
+  command: python verify/gates/g3_2.py
+  rule: both true
+  evidence_dir: docs/evidence/phase3
+- id: G3.3
+  phase: 3
+  type: REPORT
+  title: vector baseline (`em`, `f1`, `sf_recall`, CIs)
+  command: python verify/gates/g3_3.py
+  rule: produced
+  evidence_dir: docs/evidence/phase3
+- id: G3.4
+  phase: 3
+  type: REPORT
+  title: rerank baseline
+  command: python verify/gates/g3_4.py
+  rule: produced (BLOCKED if reranker unavailable)
+  evidence_dir: docs/evidence/phase3
+- id: G3.5
+  phase: 3
+  type: SOFT
+  title: extraction (`valid_rate`, `cached_jsonl`)
+  command: python verify/gates/g3_5.py
+  rule: '`valid_rate>=0.95 and cached_jsonl`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.6
+  phase: 3
+  type: SOFT
+  title: entity resolution on planted sets (`precision`, `recall`, `cross_tenant_merges`)
+  command: python verify/gates/g3_6.py
+  rule: '`precision>=0.90 and cross_tenant_merges==0`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.7
+  phase: 3
+  type: SOFT
+  title: graph load (`nodes`, `edges`, `chunks`, `nodes_without_tenant`, `edges_without_tenant`,
+    `edges_without_evidence`)
+  command: python verify/gates/g3_7.py
+  rule: the three `without` counts all 0
+  evidence_dir: docs/evidence/phase3
+- id: G3.8
+  phase: 3
+  type: HARD
+  title: tenant isolation of traversal + mutation M12 (`cross_tenant_nodes`, `cross_tenant_chunks`,
+    `m12_fails_test`)
+  command: python verify/gates/g3_8.py
+  rule: '`0, 0, true`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.9
+  phase: 3
+  type: HARD
+  title: ACL on graph path + mutation M13 (`unauthorized_chunks_in_prompt`, `unauthorized_triples_in_prompt`,
+    `layer2_alerts_when_cypher_unscoped`, `m13_fails_test`)
+  command: python verify/gates/g3_9.py
+  rule: '`0, 0, >0, true`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.10
+  phase: 3
+  type: HARD
+  title: graph-pivot leakage suite (`cases`, `leaks`)
+  command: python verify/gates/g3_10.py
+  rule: '`cases>=30 and leaks==0`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.11
+  phase: 3
+  type: REPORT
+  title: multi-hop results for (a), (b), (c)
+  command: python verify/gates/g3_11.py
+  rule: produced
+  evidence_dir: docs/evidence/phase3
+- id: G3.12
+  phase: 3
+  type: SOFT
+  title: single-hop non-regression, (c) vs (a) (`single_hop_delta_ci_low`)
+  command: python verify/gates/g3_12.py
+  rule: '`>=-0.10`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.13
+  phase: 3
+  type: SOFT
+  title: ablation table (`variants_reported`)
+  command: python verify/gates/g3_13.py
+  rule: '`==3` (or 2 with G3.4 BLOCKED, noted)'
+  evidence_dir: docs/evidence/phase3
+- id: G3.14
+  phase: 3
+  type: REPORT
+  title: indexing cost (`seconds_per_paragraph`, `total_hours`, `tokens`)
+  command: python verify/gates/g3_14.py
+  rule: produced
+  evidence_dir: docs/evidence/phase3
+- id: G3.15
+  phase: 3
+  type: REPORT
+  title: decomposition compared
+  command: python verify/gates/g3_15.py
+  rule: produced or BLOCKED `optional-skipped`
+  evidence_dir: docs/evidence/phase3
+- id: G3.16
+  phase: 3
+  type: HARD
+  title: cache interplay (`served_after_revoke_via_graph`, `sources_complete`)
+  command: python verify/gates/g3_16.py
+  rule: '`0, true`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.17
+  phase: 3
+  type: SOFT
+  title: Phase 1 and 2 regression (`leaks`, `metrics_within_noise`)
+  command: python verify/gates/g3_17.py
+  rule: '`leaks==0 and metrics_within_noise`'
+  evidence_dir: docs/evidence/phase3
+- id: G3.18
+  phase: 3
+  type: SOFT
+  title: resources (`stack_ran`, `backend`, `peak_ram_gb`)
+  command: python verify/gates/g3_18.py
+  rule: '`stack_ran`'
+  evidence_dir: docs/evidence/phase3
+- id: G4.1
+  phase: 4
+  type: SOFT
+  title: README has a mermaid block naming JWT, cache, router, `retrieve_authorized`,
+    Layer 1, Layer 2, audit (`stages_found` of 7)
+  command: python verify/gates/g4_1.py
+  rule: '`==7`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.2
+  phase: 4
+  type: SOFT
+  title: results table generated by script and equal to results JSONs (`unmatched_numbers`)
+  command: python verify/gates/g4_2.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.3
+  phase: 4
+  type: SOFT
+  title: threat model linked in the first 40 README lines (`linked`)
+  command: python verify/gates/g4_3.py
+  rule: 'true'
+  evidence_dir: docs/evidence/phase4
+- id: G4.4
+  phase: 4
+  type: SOFT
+  title: limitations (`entries`, `each_cites_gate`)
+  command: python verify/gates/g4_4.py
+  rule: '`entries>=5 and each_cites_gate`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.5
+  phase: 4
+  type: SOFT
+  title: '`docker compose config` valid; Qdrant (and Neo4j if used) services reach
+    healthy (`compose_valid`, `services_healthy`)'
+  command: python verify/gates/g4_5.py
+  rule: both true
+  evidence_dir: docs/evidence/phase4
+- id: G4.6
+  phase: 4
+  type: SOFT
+  title: fresh clone into a temp directory, venv, install, `scripts/smoke.py` with
+    `LLM_STUB=1` (`smoke_pass`)
+  command: python verify/gates/g4_6.py
+  rule: 'true'
+  evidence_dir: docs/evidence/phase4
+- id: G4.7
+  phase: 4
+  type: SOFT
+  title: CI on `main` via `gh run list` (`conclusion`)
+  command: python verify/gates/g4_7.py
+  rule: '`=="success"`; `BLOCKED` if `gh` is unavailable or unauthenticated'
+  evidence_dir: docs/evidence/phase4
+- id: G4.8
+  phase: 4
+  type: SOFT
+  title: demo assets (`dashboard_png`, `blocked_query_image`)
+  command: python verify/gates/g4_8.py
+  rule: both exist and are non-empty
+  evidence_dir: docs/evidence/phase4
+- id: G4.9
+  phase: 4
+  type: HARD
+  title: claims check on README and resume lines (`unmatched_numbers`)
+  command: python verify/gates/g4_9.py
+  rule: '`==0`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.10
+  phase: 4
+  type: HARD
+  title: secrets scan of the **full git history** (`scan_ran`, report-only `findings`)
+  command: python verify/gates/g4_10.py
+  rule: '`scan_ran` (use gitleaks if present, else a regex scan over `git log -p`
+    for `sk-`, `AIza`, `api_key`, `secret`, `token`, private key headers); any `findings>0`
+    goes to `ACTION-REQUIRED`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.11
+  phase: 4
+  type: HARD
+  title: evidence manifest complete (`manifest_ok`, `hash_mismatches`)
+  command: python verify/gates/g4_11.py
+  rule: '`manifest_ok and hash_mismatches==0`'
+  evidence_dir: docs/evidence/phase4
+- id: G4.12
+  phase: 4
+  type: HARD
+  title: status document built, nothing left unrun (`status_doc_built`, `not_run`)
+  command: python verify/gates/g4_12.py
+  rule: '`status_doc_built and not_run==0`'
+  evidence_dir: docs/evidence/phase4

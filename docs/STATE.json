@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "phase": "0",
+  "gates_done": [],
+  "gates_failed": [],
+  "gates_blocked": [],
+  "phase_status": {"0":"IN_PROGRESS","1":"TODO","2":"TODO","3":"TODO","4":"TODO"},
+  "next_action": "build execution engine",
+  "last_commit": "",
+  "notes": []
+}
