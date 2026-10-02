@@ -1,0 +1,7 @@
+COMMAND: python verify/gates/g4_3.py
+STDOUT:
+
+STDERR:
+python: can't open file 'C:\\Users\\resma\\Documents\\WORKSHOP\\Permission-Aware Multi-Tenant RAG\\verify\\gates\\g4_3.py': [Errno 2] No such file or directory
+
+EXIT_CODE: 2

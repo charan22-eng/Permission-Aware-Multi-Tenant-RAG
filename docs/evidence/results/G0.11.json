@@ -1,0 +1,17 @@
+{
+  "gate": "G0.11",
+  "phase": 0,
+  "type": "SOFT",
+  "status": "PASS",
+  "measured": {
+    "items_found": 5
+  },
+  "rule": "items_found==5",
+  "evidence_file": "docs/evidence/phase0/G0.11__20261002T114725Z.txt",
+  "evidence_sha256": "6a61c07e8ba3454a75a7a5650ac01d2db7e733e14a731bfd96f15522beffcf6e",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:25.340972+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": ""
+}

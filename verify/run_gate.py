@@ -93,9 +93,14 @@ def main():
                             status = "PASS" if all(measured.values()) else "FAIL"
                         elif rule == "both true":
                             status = "PASS" if all(measured.values()) else "FAIL"
+                        elif rule == "both 0" or rule == "all 0":
+                            status = "PASS" if all(v == 0 for v in measured.values()) else "FAIL"
+                        elif "empty list" in rule:
+                            status = "PASS" if all(len(v) == 0 for v in measured.values() if isinstance(v, list)) else "FAIL"
                         else:
                             try:
-                                passed = eval(rule, {"measured": measured}, {})
+                                locals_dict = measured.copy()
+                                passed = eval(rule, {"measured": measured}, locals_dict)
                                 status = "PASS" if passed else "FAIL"
                             except Exception as e:
                                 notes = f"Rule eval error: {e}"

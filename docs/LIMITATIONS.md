@@ -1,0 +1,10 @@
+- LIM-G0.11: Gate G0.11 measured value did not meet threshold.
+- LIM-G0.11: Gate G0.11 measured value did not meet threshold.
+- LIM-G0.11: Gate G0.11 measured value did not meet threshold.
+- LIM-G1.37: Gate G1.37 measured value did not meet threshold.
+- LIM-G1.38: Gate G1.38 measured value did not meet threshold.
+- LIM-G1.40: Gate G1.40 measured value did not meet threshold.
+- LIM-G4.1: Gate G4.1 measured value did not meet threshold.
+- LIM-G4.2: Gate G4.2 measured value did not meet threshold.
+- LIM-G4.3: Gate G4.3 measured value did not meet threshold.
+- LIM-G4.4: Gate G4.4 measured value did not meet threshold.

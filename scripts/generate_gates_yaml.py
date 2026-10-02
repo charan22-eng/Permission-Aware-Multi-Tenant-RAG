@@ -25,7 +25,7 @@ def parse_gates():
                 phase = int(gate_id[1])
                 g_type = {'H': 'HARD', 'S': 'SOFT', 'R': 'REPORT'}.get(parts[1], parts[1])
                 title = parts[2]
-                rule = parts[3]
+                rule = parts[3].strip('`').strip()
                 
                 gate = {
                     'id': gate_id,

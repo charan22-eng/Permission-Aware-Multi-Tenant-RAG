@@ -1,0 +1,15 @@
+{
+  "gate": "G1.32",
+  "phase": 1,
+  "type": "SOFT",
+  "status": "BLOCKED",
+  "measured": null,
+  "rule": "count>=20 and acl_violations==0` (each question's answer fact exists only in documents the persona cannot access, checked by the ACL function)",
+  "evidence_file": null,
+  "evidence_sha256": null,
+  "git_head": "a4a3201059a58ef1a813f00b4ffe839ee9a4ce95",
+  "utc": "2026-10-02T11:47:26.410299+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "BLOCKED: Docker/Qdrant not running"
+}

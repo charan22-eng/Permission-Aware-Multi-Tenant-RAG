@@ -1,13 +1,8 @@
 # Permission-Aware Multi-Tenant RAG
 
-A defense-in-depth, permission-aware multi-tenant RAG system built for secure AI interactions.
-
-## Results
-
-| TBD | TBD | TBD |
-
-## Known Limitations (Phase 0)
-- **Dense Retrieval on Pronouns:** Q0 and Q2 failed to retrieve the correct chunks because the ground truth chunks use pronouns ("The company", "We") instead of the explicit company name ("Apex Innovations"). 
-  - Q0 improves significantly (Rank 1) when the company name is removed from the query.
-  - Q2 does not improve (Rank 18) because the chunk lacks strong semantic overlap beyond "healthcare".
-  - This highlights the limitation of dense-only retrieval on short, pronoun-heavy chunks without metadata or contextual augmentation.
+## Known limitations
+- Q0 and Q2 dense-only misses (Q0 improves when the company name is removed, Q2 does not)
+- numeric veto is one-directional and passes answers containing no numbers
+- judge prompt was tuned on a small set
+- the corpus is one-fact-per-chunk so the eval is a regression detector, not proof of quality
+- spelled-out numbers are invisible to the numeric check

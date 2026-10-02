@@ -1,0 +1,15 @@
+{
+  "gate": "G4.2",
+  "phase": 4,
+  "type": "SOFT",
+  "status": "ERROR",
+  "measured": null,
+  "rule": "==0",
+  "evidence_file": "docs/evidence/phase4/G4.2__20261002T114728Z.txt",
+  "evidence_sha256": "60cf007f37c71077d700b4a7adbf24ba4233fe59cae521746b353263e43c6267",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:28.370536+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "Command crashed or exited non-zero"
+}

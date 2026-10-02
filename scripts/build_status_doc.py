@@ -90,7 +90,8 @@ def build_status_doc():
             r = results.get(g["id"])
             if r:
                 meas_str = json.dumps(r.get("measured"))
-                ehash = r.get("evidence_sha256", "unknown")[:8]
+                ehash_val = r.get("evidence_sha256")
+                ehash = ehash_val[:8] if ehash_val else "unknown"
                 out_lines.append(f"| {g['id']} | {g['type']} | {r['status']} | `{meas_str}` | `{g['rule']}` | {r.get('evidence_file')} | {ehash} | {r.get('notes')} |")
             else:
                 out_lines.append(f"| {g['id']} | {g['type']} | NOT-RUN | | `{g['rule']}` | | | |")

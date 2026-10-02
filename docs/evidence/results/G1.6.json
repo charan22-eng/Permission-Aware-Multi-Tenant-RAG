@@ -1,0 +1,15 @@
+{
+  "gate": "G1.6",
+  "phase": 1,
+  "type": "SOFT",
+  "status": "BLOCKED",
+  "measured": null,
+  "rule": "misses_subset_of_q0_q2 and hit5>=0.93 and combined>=0.90",
+  "evidence_file": null,
+  "evidence_sha256": null,
+  "git_head": "a4a3201059a58ef1a813f00b4ffe839ee9a4ce95",
+  "utc": "2026-10-02T11:47:26.386247+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "BLOCKED: Docker/Qdrant not running"
+}

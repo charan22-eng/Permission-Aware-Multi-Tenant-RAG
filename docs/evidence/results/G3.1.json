@@ -1,0 +1,15 @@
+{
+  "gate": "G3.1",
+  "phase": 3,
+  "type": "SOFT",
+  "status": "BLOCKED",
+  "measured": null,
+  "rule": "source in {\"hotpotqa\",\"FALLBACK-SYNTHETIC\"} and n>=30 and license_noted",
+  "evidence_file": null,
+  "evidence_sha256": null,
+  "git_head": "a4a3201059a58ef1a813f00b4ffe839ee9a4ce95",
+  "utc": "2026-10-02T11:47:27.504897+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "BLOCKED: Neo4j cannot run"
+}

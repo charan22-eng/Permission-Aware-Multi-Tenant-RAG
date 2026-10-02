@@ -1,0 +1,7 @@
+COMMAND: python verify/gates/g0_12.py
+STDOUT:
+RESULT_JSON: {"measured": {"zero_byte": 0, "modified_or_deleted": 0}, "notes": ""}
+
+STDERR:
+
+EXIT_CODE: 0

@@ -1,0 +1,7 @@
+COMMAND: python verify/gates/g0_11.py
+STDOUT:
+RESULT_JSON: {"measured": {"items_found": 5}, "notes": ""}
+
+STDERR:
+
+EXIT_CODE: 0

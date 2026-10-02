@@ -1,0 +1,17 @@
+{
+  "gate": "G0.13",
+  "phase": 0,
+  "type": "HARD",
+  "status": "PASS",
+  "measured": {
+    "changed_files": []
+  },
+  "rule": "empty list (otherwise follow step 2 and document)",
+  "evidence_file": "docs/evidence/phase0/G0.13__20261002T114726Z.txt",
+  "evidence_sha256": "6f9cf6004ec265f321b933a2bb06c91d0a8c07dd246a3d19fa1e8d14ac58dbde",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:26.281755+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": ""
+}

@@ -1,0 +1,15 @@
+{
+  "gate": "G1.37",
+  "phase": 1,
+  "type": "SOFT",
+  "status": "ERROR",
+  "measured": null,
+  "rule": "has Assets, Actors, Trust boundaries, Attack table, Residual risks (token role-change lag, writable ACL table and droppable triggers, audit log is itself sensitive), OWASP names with edition note",
+  "evidence_file": "docs/evidence/phase1/G1.37__20261002T114726Z.txt",
+  "evidence_sha256": "83bbd899b556f59d57519c1b4768dc033e71e48627a3fcb5508d8c2b73001462",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:26.700785+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "Command crashed or exited non-zero"
+}

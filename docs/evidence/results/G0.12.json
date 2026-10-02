@@ -1,0 +1,18 @@
+{
+  "gate": "G0.12",
+  "phase": 0,
+  "type": "HARD",
+  "status": "PASS",
+  "measured": {
+    "zero_byte": 0,
+    "modified_or_deleted": 0
+  },
+  "rule": "both 0",
+  "evidence_file": "docs/evidence/phase0/G0.12__20261002T114725Z.txt",
+  "evidence_sha256": "7352717d2e5aa97c746c3d4770cb92a8aed743541997af8db723d01975b1253e",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:25.885380+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": ""
+}

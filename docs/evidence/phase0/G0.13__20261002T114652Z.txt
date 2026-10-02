@@ -1,0 +1,7 @@
+COMMAND: python verify/gates/g0_13.py
+STDOUT:
+RESULT_JSON: {"measured": {"changed_files": []}, "notes": ""}
+
+STDERR:
+
+EXIT_CODE: 0

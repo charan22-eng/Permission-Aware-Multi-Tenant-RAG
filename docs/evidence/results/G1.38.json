@@ -1,0 +1,15 @@
+{
+  "gate": "G1.38",
+  "phase": 1,
+  "type": "SOFT",
+  "status": "ERROR",
+  "measured": null,
+  "rule": "section present and `>=3` residual risks",
+  "evidence_file": "docs/evidence/phase1/G1.38__20261002T114726Z.txt",
+  "evidence_sha256": "7e5db4e7797260b90a233819ef69d9080cf8ae11d59d8c4d03d9a663e07549a2",
+  "git_head": "324c62cc36a4724c7b76d7ef7c7a52c3301a055d",
+  "utc": "2026-10-02T11:47:26.990474+00:00",
+  "python": "3.11.9",
+  "ollama_models": [],
+  "notes": "Command crashed or exited non-zero"
+}
